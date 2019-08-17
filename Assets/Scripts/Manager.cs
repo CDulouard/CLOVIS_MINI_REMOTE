@@ -37,11 +37,13 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        foreach (var selecter in selecters)
+        lock (_values)
         {
-            _values[selecter.selecterTag] = int.Parse(selecter.textInput.text);
+            foreach (var selecter in selecters)
+            {
+                _values[selecter.selecterTag] = int.Parse(selecter.textInput.text);
+            }
         }
-
         if (_socket.IsConnected)
         {
             connectStatus.color = Color.green;
@@ -83,12 +85,28 @@ public class Manager : MonoBehaviour
     private string ValuesToJson()
     {
         var json = "{";
-        foreach (var i in _values)
+        lock (_values)
         {
-            json = $"{json}\" {i.Key}\" : {i.Value}, ";
+            foreach (var i in _values)
+            {
+                json = $"{json}\" {i.Key}\" : {i.Value}, ";
+            }
         }
         json = json.Remove(json.Length - 2);
         json += "}";
         return json;
     }
 }
+/*
+InvalidOperationException: Collection was modified; enumeration operation may not execute.
+System.Collections.Generic.Dictionary`2+Enumerator[TKey,TValue].MoveNext () (at <a8ed250850854b439cedc18931a314fe>:0)
+Manager.ValuesToJson () (at D:/Clement/Documents/Unity/Remote/Assets/Scripts/Manager.cs:86)
+Manager.SendData () (at D:/Clement/Documents/Unity/Remote/Assets/Scripts/Manager.cs:78)
+System.Threading.ThreadHelper.ThreadStart_Context (System.Object state) (at <a8ed250850854b439cedc18931a314fe>:0)
+System.Threading.ExecutionContext.RunInternal (System.Threading.ExecutionContext executionContext, System.Threading.ContextCallback callback, System.Object state, System.Boolean preserveSyncCtx) (at <a8ed250850854b439cedc18931a314fe>:0)
+System.Threading.ExecutionContext.Run (System.Threading.ExecutionContext executionContext, System.Threading.ContextCallback callback, System.Object state, System.Boolean preserveSyncCtx) (at <a8ed250850854b439cedc18931a314fe>:0)
+System.Threading.ExecutionContext.Run (System.Threading.ExecutionContext executionContext, System.Threading.ContextCallback callback, System.Object state) (at <a8ed250850854b439cedc18931a314fe>:0)
+System.Threading.ThreadHelper.ThreadStart () (at <a8ed250850854b439cedc18931a314fe>:0)
+UnityEngine.UnhandledExceptionHandler:<RegisterUECatcher>m__0(Object, UnhandledExceptionEventArgs)
+
+*/
