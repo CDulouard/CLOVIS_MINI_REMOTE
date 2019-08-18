@@ -38,7 +38,9 @@ public class Message
         json += _messageId.ToString();
         json += ", \"parity\": ";
         json += _parity.ToString();
-        json += ", \"len\": \"";
+        json += ", \"len\": ";
+        json += _len;
+        json += ", \"message\": \"";
         json += _message;
         json += "\"}";
         return json;
