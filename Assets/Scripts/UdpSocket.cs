@@ -51,7 +51,7 @@ public class UdpSocket
             _client.Connect(ipServerEndPoint);
             var hashPass = CryptPass("test");
             var message = $"{{pass : \"{hashPass}\"}}";
-            Send(message);
+            Send(1, message);
             IsConnected = true;
         }
 
@@ -74,9 +74,10 @@ public class UdpSocket
             return sb.ToString();
         }
 
-        public void Send(string message)
+        public void Send(int id, string message)
         {
-            var data = Encoding.UTF8.GetBytes(message);
+            var msgToSend = new Message(id, message).ToJson();
+            var data = Encoding.UTF8.GetBytes(msgToSend);
             _client.BeginSend(data, data.Length, SendCallback, this);
         }
 

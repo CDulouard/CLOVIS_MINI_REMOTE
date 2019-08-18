@@ -84,7 +84,7 @@ public class Manager : MonoBehaviour
         while (_isRunning)
         {
             if (!_socket.IsConnected || !_socket.IsActive) continue;
-            _socket.Send(ValuesToJson());
+            _socket.Send(5, ValuesToJson());
             Thread.Sleep(200);
         }
     }
@@ -96,7 +96,7 @@ public class Manager : MonoBehaviour
         {
             foreach (var i in _values)
             {
-                json = $"{json}\" {i.Key}\" : {i.Value}, ";
+                json = $"{json}\"{i.Key}\" : {i.Value}, ";
             }
         }
         json = json.Remove(json.Length - 2);
