@@ -900,9 +900,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3034df9085f0e49a7cb695a7689060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localIP: {fileID: 1747699295}
+  localIp: {fileID: 1747699295}
   localPort: {fileID: 1274734363}
-  serverIP: {fileID: 676818800}
+  serverIp: {fileID: 676818800}
   serverPort: {fileID: 915104523}
   serverPassword: {fileID: 297820391}
   errorDisplayer: {fileID: 1148343925}
@@ -7111,6 +7111,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Selecter22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8063783783126646176, guid: 5e5c6d8fd99509346bba0273283f68d2,
+        type: 3}
+      propertyPath: selecterName
+      value: headRX
+      objectReference: {fileID: 0}
+    - target: {fileID: 8063783783126646176, guid: 5e5c6d8fd99509346bba0273283f68d2,
+        type: 3}
+      propertyPath: selecterTag
+      value: headRX
       objectReference: {fileID: 0}
     - target: {fileID: 8063783783126646179, guid: 5e5c6d8fd99509346bba0273283f68d2,
         type: 3}

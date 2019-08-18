@@ -113,7 +113,9 @@ public class UdpSocket
         {
             var receiveBytes = _client.EndReceive(ar, ref _clientEndPoint);
             var receiveString = Encoding.UTF8.GetString(receiveBytes);
+            Manager.msg = receiveString;
             Debug.Log($"Received: {receiveString}"); //DEBUG
+            
             _messageReceived = true;
             _isListening = false;
         }

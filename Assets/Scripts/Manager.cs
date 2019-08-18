@@ -16,6 +16,8 @@ public class Manager : MonoBehaviour
     public  List<Selecter> selecters;
     private Dictionary<string, int> _values = new Dictionary<string, int>();
 
+    public static string msg;
+
     private bool _isRunning;
     private UdpSocket _socket; 
     // Start is called before the first frame update
@@ -34,6 +36,7 @@ public class Manager : MonoBehaviour
         var dataRefresh = new Thread(SendData);
         dataRefresh.Start();
         errorDisplayer.text = "";
+        msg = "";
     }
 
     // Update is called once per frame
@@ -56,7 +59,9 @@ public class Manager : MonoBehaviour
             connectStatus.color = Color.red;
             connectStatus.text = "Disconnected";
         }
-        
+
+        errorDisplayer.text = msg;
+
     }
 
     private void OnApplicationQuit()
