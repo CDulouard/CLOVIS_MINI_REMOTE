@@ -85,6 +85,7 @@ public class Manager : MonoBehaviour
         {
             if (!_socket.IsConnected || !_socket.IsActive) continue;
             _socket.Send(5, ValuesToJson());
+            //_socket.Send(5, "tesu");
             Thread.Sleep(200);
         }
     }

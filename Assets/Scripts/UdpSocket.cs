@@ -50,7 +50,7 @@ public class UdpSocket
             var ipServerEndPoint =  new IPEndPoint(IPAddress.Parse(ipAddress), port);
             _client.Connect(ipServerEndPoint);
             var hashPass = CryptPass("test");
-            var message = $"{{pass : \"{hashPass}\"}}";
+            var message = "{\"pass\" : \"" + hashPass + "\"}";
             Send(1, message);
             IsConnected = true;
         }
