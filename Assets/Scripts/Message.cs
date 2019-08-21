@@ -14,6 +14,13 @@ public class Message
         _messageId = id;
         _message = message;
         _len = message.Length;
+        for (var i = 0; i < message.Length - 1; i++)
+        {
+            if (message[i] == '\\' && message[i + 1] == '\"')
+            {
+                _len -= 1;
+            }
+        }
         parityCheck();
     }
 

@@ -46,7 +46,10 @@ public class Manager : MonoBehaviour
         {
             foreach (var selecter in selecters)
             {
-                _values[selecter.selecterTag] = int.Parse(selecter.textInput.text);
+                if (!selecter.textInput.isFocused)
+                {
+                    _values[selecter.selecterTag] = int.Parse(selecter.textInput.text);
+                }
             }
         }
         if (_socket.IsConnected)
@@ -97,7 +100,7 @@ public class Manager : MonoBehaviour
         {
             foreach (var i in _values)
             {
-                json = $"{json}\"{i.Key}\" : {i.Value}, ";
+                json = $"{json}\\\"{i.Key}\\\" : {i.Value}, ";
             }
         }
         json = json.Remove(json.Length - 2);
