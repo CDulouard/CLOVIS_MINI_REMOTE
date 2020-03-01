@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading;
+using ConsoleApplication1;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,13 +16,16 @@ public class Manager : MonoBehaviour
     public Text errorDisplayer;
     public Button connectButton;
     public Text connectStatus;
-    public  List<Selecter> selecters;
+    public List<Selecter> selecters;
     private Dictionary<string, int> _values = new Dictionary<string, int>();
+    public static IPEndPoint RemoteUser = null;
 
     public static string msg;
 
     private bool _isRunning;
-    private UdpSocket _socket; 
+
+    private UdpSocket _socket;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -33,6 +39,7 @@ public class Manager : MonoBehaviour
                 _values.Add(selecter.selecterTag, int.Parse(selecter.textInput.text));
             }
         }
+
         var dataRefresh = new Thread(SendData);
         dataRefresh.Start();
         errorDisplayer.text = "";
@@ -52,7 +59,8 @@ public class Manager : MonoBehaviour
                 }
             }
         }
-        if (_socket.IsConnected)
+
+        if (RemoteUser != null)
         {
             connectStatus.color = Color.green;
             connectStatus.text = "Connected";
@@ -64,7 +72,6 @@ public class Manager : MonoBehaviour
         }
 
         errorDisplayer.text = msg;
-
     }
 
     private void OnApplicationQuit()
@@ -73,22 +80,36 @@ public class Manager : MonoBehaviour
         {
             _socket.Stop();
         }
+
         _isRunning = false;
     }
 
     private void Connection()
     {
-        _socket.Start(localIp.text, int.Parse(localPort.text));
-        _socket.ConnectionToServer(serverIp.text, int.Parse(serverPort.text), serverPassword.text);
+        try
+        {
+            _socket.Start(localIp.text, int.Parse(localPort.text));
+            _socket.SendTo(serverIp.text, int.Parse(serverPort.text),
+                Message.CreateOldConnectionMessage(serverPassword.text, int.Parse(localPort.text), true)
+                    .ToJson());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     private void SendData()
     {
         while (_isRunning)
         {
-            if (!_socket.IsConnected || !_socket.IsActive) continue;
-            _socket.Send(5, ValuesToJson());
-            //_socket.Send(5, "tesu");
+            if (RemoteUser == null) continue;
+            // _socket.Send(5, ValuesToJson());
+            lock (_values)
+            {
+                _socket.SendTo(RemoteUser, Message.CreateOldCommandsMessage(_values).ToJson());
+            }
+
             Thread.Sleep(200);
         }
     }
@@ -103,6 +124,7 @@ public class Manager : MonoBehaviour
                 json = $"{json}\\\"{i.Key}\\\" : {i.Value}, ";
             }
         }
+
         json = json.Remove(json.Length - 2);
         json += "}";
         return json;
