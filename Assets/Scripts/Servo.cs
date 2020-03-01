@@ -35,30 +35,30 @@ public class Servo
         var currentAngle = currentRotation.eulerAngles;
         var targetAngle = axis * (targetPos + offset);
 
-        if (_initialAngle != new Vector3(0, 0, 0))
-        {
-            // ROTATION Z
-            var xComp = Mathf.Cos(_initialAngle.z) * _initialAngle.x + Mathf.Sin(_initialAngle.z) * _initialAngle.y;
-            var yComp = Mathf.Cos(_initialAngle.z) * _initialAngle.y - Mathf.Sin(_initialAngle.z) * _initialAngle.x;
-            var zComp = 1 * _initialAngle.z;
-
-            var newSpace = new Vector3(xComp, yComp, zComp);
-
-
-            var targetX = Mathf.Cos(currentAngle.z) * targetAngle.x + Mathf.Sin(currentAngle.z) * targetAngle.x;
-            var xRot = targetX - currentAngle.x;
-            
-            var targetY = Mathf.Cos(xRot) * currentAngle.y + Mathf.Sin(xRot) * currentAngle.z;
-            var targetZ = - Mathf.Sin(xRot * currentAngle.y) + Mathf.Cos(xRot) * currentAngle.z;
-            
-            targetAngle = new Vector3(targetX, targetY, targetZ);
-        }
+        // if (_initialAngle != new Vector3(0, 0, 0))
+        // {
+        //     // ROTATION Z
+        //     var xComp = Mathf.Cos(_initialAngle.z) * _initialAngle.x + Mathf.Sin(_initialAngle.z) * _initialAngle.y;
+        //     var yComp = Mathf.Cos(_initialAngle.z) * _initialAngle.y - Mathf.Sin(_initialAngle.z) * _initialAngle.x;
+        //     var zComp = 1 * _initialAngle.z;
+        //
+        //     var newSpace = new Vector3(xComp, yComp, zComp);
+        //
+        //
+        //     var targetX = Mathf.Cos(currentAngle.z) * targetAngle.x + Mathf.Sin(currentAngle.z) * targetAngle.x;
+        //     var xRot = targetX - currentAngle.x;
+        //     
+        //     var targetY = Mathf.Cos(xRot) * currentAngle.y + Mathf.Sin(xRot) * currentAngle.z;
+        //     var targetZ = - Mathf.Sin(xRot * currentAngle.y) + Mathf.Cos(xRot) * currentAngle.z;
+        //     
+        //     targetAngle = new Vector3(targetX, targetY, targetZ);
+        // }
 
 
         // Debug.Log(targetAngle);
         // targetAngle.x = targetAngle.x * (float) Math.Cos(_initialRotation.z);
 
-        var targetRotation = new Quaternion {eulerAngles = targetAngle};
+        var targetRotation = _initialRotation * new Quaternion {eulerAngles = targetAngle};
 
 
         // rotation.eulerAngles = new Vector3(Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime * speed) * axis.x,

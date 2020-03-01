@@ -6,20 +6,22 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     public List<Servo> lServo;
+
+    private List<string> _motorNames;
     
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
         foreach (var servo in lServo)
         {
             servo.Init();
         }
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        
     }
 
     private void FixedUpdate()
