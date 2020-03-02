@@ -25,6 +25,7 @@ public class Manager : MonoBehaviour
     public static string msg;
 
     private bool _isRunning;
+    private bool _remoteControl = false;
 
     private UdpSocket _socket;
     private float _lastRefresh;
@@ -49,7 +50,6 @@ public class Manager : MonoBehaviour
         errorDisplayer.text = "";
         msg = "";
         _lastRefresh = Time.time;
-        
     }
 
     // Update is called once per frame
@@ -70,6 +70,10 @@ public class Manager : MonoBehaviour
         {
             connectStatus.color = Color.green;
             connectStatus.text = "Connected";
+            if (_remoteControl)
+            {
+                RefreshStatus();
+            }
         }
         else
         {
@@ -78,8 +82,6 @@ public class Manager : MonoBehaviour
         }
 
         errorDisplayer.text = msg;
-        
-        RefreshStatus();
     }
 
     private void OnApplicationQuit()
@@ -111,14 +113,29 @@ public class Manager : MonoBehaviour
     {
         while (_isRunning)
         {
-            if (RemoteUser == null) continue;
-            // _socket.Send(5, ValuesToJson());
-            lock (_values)
+            if (RemoteUser != null || _remoteControl)
             {
-                _socket.SendTo(RemoteUser, Message.CreateOldCommandsMessage(_values).ToJson());
-            }
+                // _socket.Send(5, ValuesToJson());
+                lock (_values)
+                {
+                    _socket.SendTo(RemoteUser, Message.CreateOldCommandsMessage(_values).ToJson());
+                }
 
-            Thread.Sleep(200);
+                Thread.Sleep(200);
+            }
+            else if (!_remoteControl)
+            {
+                lock (_values)
+                {
+                    robotController.UpdatePos(
+                        robotController.ConvertRealPosToSimulationPos(ConvertDictIntToFloat(_values)));
+                }
+                Thread.Sleep(10);
+            }
+            else
+            {
+                Thread.Sleep(10);
+            }
         }
     }
 
@@ -137,7 +154,7 @@ public class Manager : MonoBehaviour
     //     json += "}";
     //     return json;
     // }
-    
+
     private void RefreshStatus()
     {
         if (Time.time - _lastRefresh >= DelayRefreshStatus && RemoteUser != null)
@@ -150,5 +167,30 @@ public class Manager : MonoBehaviour
             robotController.UpdatePos(robotController.ConvertRealPosToSimulationPos(_socket.GetLastPos()));
         }
     }
-    
+
+    public Dictionary<string, float> ConvertDictIntToFloat(Dictionary<string, int> toConvert)
+    {
+        var toReturn = new Dictionary<string, float>();
+        foreach (var key in toConvert.Keys)
+        {
+            toReturn[key] = (float) toConvert[key];
+        }
+
+        return toReturn;
+    }
+
+    public void SetRemoteControl(bool value)
+    {
+        _remoteControl = value;
+    }
+
+    public bool GetRemoteControl()
+    {
+        return _remoteControl;
+    }
+
+    public void ChangeRemoteControl()
+    {
+        _remoteControl = !_remoteControl;
+    }
 }
