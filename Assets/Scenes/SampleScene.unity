@@ -1174,6 +1174,7 @@ MonoBehaviour:
   - {fileID: 1749166941}
   - {fileID: 833374669}
   - {fileID: 572084287}
+  robotController: {fileID: 1995751706498616024}
 --- !u!1 &147084303
 GameObject:
   m_ObjectHideFlags: 0
@@ -9786,6 +9787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3308188881205868740}
   - component: {fileID: 4855741879158347198}
+  - component: {fileID: 1995751706498616024}
   m_Layer: 0
   m_Name: CLOVIS_MINI
   m_TagString: Untagged
@@ -9793,6 +9795,163 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1995751706498616024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995751706498616023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a727507c63e525541a3c1b1b19c221fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lServo:
+  - motorName: headRX
+    rotationPoint: {fileID: 1788803362}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rShoulderBaseRY
+    rotationPoint: {fileID: 2007653777}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lShoulderBaseRY
+    rotationPoint: {fileID: 1753885519}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rShoulderRZ
+    rotationPoint: {fileID: 1182109914}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lShoulderRZ
+    rotationPoint: {fileID: 1927903110}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rShoulderRY
+    rotationPoint: {fileID: 433497231}
+    axis: {x: 0, y: 1, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lShoulderRY
+    rotationPoint: {fileID: 289537432}
+    axis: {x: 0, y: 1, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rElbowRX
+    rotationPoint: {fileID: 47945603}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lElbowRX
+    rotationPoint: {fileID: 771092424}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: torsoRY
+    rotationPoint: {fileID: 444697424}
+    axis: {x: 0, y: 1, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rHipRZ
+    rotationPoint: {fileID: 1770456545}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rHipRZ
+    rotationPoint: {fileID: 531346466}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rHipRY
+    rotationPoint: {fileID: 147084304}
+    axis: {x: 0, y: 1, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lHipRY
+    rotationPoint: {fileID: 1755757945}
+    axis: {x: 0, y: 1, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rHipRX
+    rotationPoint: {fileID: 1296202383}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lHipRX
+    rotationPoint: {fileID: 750742939}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rKneeRX_part1
+    rotationPoint: {fileID: 1828606915}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lKneeRX_part1
+    rotationPoint: {fileID: 1467958405}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rKneeRX_part2
+    rotationPoint: {fileID: 234253712}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rKneeRX_part2
+    rotationPoint: {fileID: 832980315}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rAnkleRX
+    rotationPoint: {fileID: 2140662735}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: lAnkleRX
+    rotationPoint: {fileID: 1834086283}
+    axis: {x: 1, y: 0, z: 0}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rAnkleRZ
+    rotationPoint: {fileID: 390744026}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
+  - motorName: rAnkleRZ
+    rotationPoint: {fileID: 1445934675}
+    axis: {x: 0, y: 0, z: 1}
+    speed: 5
+    offset: 0
+    targetPos: 0
 --- !u!33 &2048787889039958800
 MeshFilter:
   m_ObjectHideFlags: 0

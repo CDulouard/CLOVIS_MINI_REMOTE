@@ -21,6 +21,7 @@ namespace ConsoleApplication1
         private int _bufSize;
         private State _state;
         private AsyncCallback _recv;
+        public Dictionary<string, float> LastPos = new Dictionary<string, float>();
 
         private EndPoint _epFrom = new IPEndPoint(IPAddress.Any, 0);
 
@@ -534,6 +535,23 @@ namespace ConsoleApplication1
 
                             break;
 
+                        case 4:
+                            try
+                            {
+                                var tmp = JsonConvert.DeserializeObject<OldRobotStatus>(rcvMessage.message);
+                                Debug.Log(tmp.ToPosDict());
+                                lock (LastPos)
+                                {
+                                    LastPos = tmp.ToPosDict();
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.Log(e);
+                            }
+
+                            break;
+
                         default:
                             if (_verbose)
                             {
@@ -634,6 +652,14 @@ namespace ConsoleApplication1
             }
 
             return strBuild.ToString();
+        }
+
+        public Dictionary<string, float> GetLastPos()
+        {
+            lock (LastPos)
+            {
+                return LastPos;
+            }
         }
     }
 }

@@ -219,5 +219,11 @@ namespace ConsoleApplication1
         {
             return new Message(5, new OldRobotData(positions, torques).ToJson());
         }
+
+        public static Message CreatOldRefreshStatusMessage()
+        {
+            return new Message(3, "{}");
+        }
+        
     }
 }

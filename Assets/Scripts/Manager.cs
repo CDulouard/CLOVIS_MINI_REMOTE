@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using ConsoleApplication1;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
@@ -19,12 +20,15 @@ public class Manager : MonoBehaviour
     public List<Selecter> selecters;
     private Dictionary<string, int> _values = new Dictionary<string, int>();
     public static IPEndPoint RemoteUser = null;
+    public Controller robotController;
 
     public static string msg;
 
     private bool _isRunning;
 
     private UdpSocket _socket;
+    private float _lastRefresh;
+    private const float DelayRefreshStatus = 0.2f;
 
     // Start is called before the first frame update
     private void Start()
@@ -44,6 +48,8 @@ public class Manager : MonoBehaviour
         dataRefresh.Start();
         errorDisplayer.text = "";
         msg = "";
+        _lastRefresh = Time.time;
+        
     }
 
     // Update is called once per frame
@@ -72,6 +78,8 @@ public class Manager : MonoBehaviour
         }
 
         errorDisplayer.text = msg;
+        
+        RefreshStatus();
     }
 
     private void OnApplicationQuit()
@@ -114,19 +122,33 @@ public class Manager : MonoBehaviour
         }
     }
 
-    private string ValuesToJson()
+    // private string ValuesToJson()
+    // {
+    //     var json = "{";
+    //     lock (_values)
+    //     {
+    //         foreach (var i in _values)
+    //         {
+    //             json = $"{json}\\\"{i.Key}\\\" : {i.Value}, ";
+    //         }
+    //     }
+    //
+    //     json = json.Remove(json.Length - 2);
+    //     json += "}";
+    //     return json;
+    // }
+    
+    private void RefreshStatus()
     {
-        var json = "{";
-        lock (_values)
+        if (Time.time - _lastRefresh >= DelayRefreshStatus && RemoteUser != null)
         {
-            foreach (var i in _values)
-            {
-                json = $"{json}\\\"{i.Key}\\\" : {i.Value}, ";
-            }
+            _socket.SendTo(RemoteUser, Message.CreatOldRefreshStatusMessage().ToJson());
         }
 
-        json = json.Remove(json.Length - 2);
-        json += "}";
-        return json;
+        if (Time.time - _lastRefresh >= 0.1f && RemoteUser != null)
+        {
+            robotController.UpdatePos(robotController.ConvertRealPosToSimulationPos(_socket.GetLastPos()));
+        }
     }
+    
 }
