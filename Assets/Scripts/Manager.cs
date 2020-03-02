@@ -17,15 +17,19 @@ public class Manager : MonoBehaviour
     public Text errorDisplayer;
     public Button connectButton;
     public Text connectStatus;
+    public Controller robotController;
+    public Text modeDisplay;
+    public Text controlDisplay;
     public List<Selecter> selecters;
     private Dictionary<string, int> _values = new Dictionary<string, int>();
     public static IPEndPoint RemoteUser = null;
-    public Controller robotController;
+
 
     public static string msg;
 
     private bool _isRunning;
     private bool _remoteControl = false;
+    private bool _controlRobot = true;
 
     private UdpSocket _socket;
     private float _lastRefresh;
@@ -81,6 +85,28 @@ public class Manager : MonoBehaviour
             connectStatus.text = "Disconnected";
         }
 
+        if (_remoteControl)
+        {
+            modeDisplay.color = Color.green;
+            modeDisplay.text = "Remote";
+        }
+        else
+        {
+            modeDisplay.color = Color.red;
+            modeDisplay.text = "Local";
+        }
+
+        if (_controlRobot)
+        {
+            controlDisplay.color = Color.green;
+            controlDisplay.text = "On";
+        }
+        else
+        {
+            controlDisplay.color = Color.red;
+            controlDisplay.text = "Off";
+        }
+
         errorDisplayer.text = msg;
     }
 
@@ -113,7 +139,7 @@ public class Manager : MonoBehaviour
     {
         while (_isRunning)
         {
-            if (RemoteUser != null || _remoteControl)
+            if (RemoteUser != null && _remoteControl && _controlRobot)
             {
                 // _socket.Send(5, ValuesToJson());
                 lock (_values)
@@ -130,6 +156,7 @@ public class Manager : MonoBehaviour
                     robotController.UpdatePos(
                         robotController.ConvertRealPosToSimulationPos(ConvertDictIntToFloat(_values)));
                 }
+
                 Thread.Sleep(10);
             }
             else
@@ -139,30 +166,15 @@ public class Manager : MonoBehaviour
         }
     }
 
-    // private string ValuesToJson()
-    // {
-    //     var json = "{";
-    //     lock (_values)
-    //     {
-    //         foreach (var i in _values)
-    //         {
-    //             json = $"{json}\\\"{i.Key}\\\" : {i.Value}, ";
-    //         }
-    //     }
-    //
-    //     json = json.Remove(json.Length - 2);
-    //     json += "}";
-    //     return json;
-    // }
 
     private void RefreshStatus()
     {
-        if (Time.time - _lastRefresh >= DelayRefreshStatus && RemoteUser != null)
+        if (Time.time - _lastRefresh >= DelayRefreshStatus && RemoteUser != null && _remoteControl)
         {
             _socket.SendTo(RemoteUser, Message.CreatOldRefreshStatusMessage().ToJson());
         }
 
-        if (Time.time - _lastRefresh >= 0.1f && RemoteUser != null)
+        if (Time.time - _lastRefresh >= 0.1f && RemoteUser != null && _remoteControl)
         {
             robotController.UpdatePos(robotController.ConvertRealPosToSimulationPos(_socket.GetLastPos()));
         }
@@ -192,5 +204,21 @@ public class Manager : MonoBehaviour
     public void ChangeRemoteControl()
     {
         _remoteControl = !_remoteControl;
+    }
+
+    public void StartControl()
+    {
+        _controlRobot = true;
+    }
+
+
+    public void StopControl()
+    {
+        _controlRobot = false;
+        if (RemoteUser != null)
+        {
+            _socket.SendTo(RemoteUser, Message.CreatOldStopMotorsMessage().ToJson());
+            
+        }
     }
 }

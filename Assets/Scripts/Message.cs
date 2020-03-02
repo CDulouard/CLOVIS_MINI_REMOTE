@@ -225,5 +225,10 @@ namespace ConsoleApplication1
             return new Message(3, "{}");
         }
         
+        public static Message CreatOldStopMotorsMessage()
+        {
+            return new Message(7, "{}");
+        }
+        
     }
 }
